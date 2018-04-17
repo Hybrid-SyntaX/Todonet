@@ -1,0 +1,42 @@
+﻿<h1>Tasks</h1>
+
+<!--<task-form></task-form>-->
+
+<pre> 
+
+  {{ task | json }}
+  
+</pre>
+<form (ngSubmit)="save()" class="form-inline">
+    
+        <input type="text"
+               name="name"
+               id="name"
+               class="form-control"
+               [(ngModel)]="task.name" />
+        <button class="btn btn-default">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    
+</form>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Task</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let task of tasks">
+            <td>{{ task.name }}</td>
+            <td class="btn-group" > <!-- TODO: show on hover only-->
+                <button class="btn btn-default btn-sm" (click)="edit(task)">
+                    <span class="glyphicon glyphicon-pencil" ></span>
+                </button>
+                <button class="btn btn-default btn-sm" (click)="remove(task)">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </td>
+        </tr>
+        
+    </tbody>
+</table>
