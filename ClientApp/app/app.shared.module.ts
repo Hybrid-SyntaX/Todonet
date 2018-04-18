@@ -35,7 +35,7 @@ import { SharedService } from './services/shared.service';
         HttpModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: '', redirectTo: 'tasks', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'tasks', component: TasksListComponent },
             { path: 'counter', component: CounterComponent },
