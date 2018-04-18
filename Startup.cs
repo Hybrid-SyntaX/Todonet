@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.net.Persistence;
+using Todo.net.Util;
 
 namespace Todo.net
 {
@@ -21,6 +23,7 @@ namespace Todo.net
 
         public IConfiguration Configuration { get; }
 
+  
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -28,6 +31,8 @@ namespace Todo.net
 
             //services.AddDbContext<TodoDbContext>(options =>
             //    options.UseSqlite(Configuration.GetConnectionString("Default")));
+
+//            Console.Write(Heroku.Confgs);
 
             services.AddDbContext<TodoDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Heroku_Postgres")));
