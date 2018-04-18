@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,11 +30,6 @@ namespace Todo.net
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
-            //services.AddDbContext<TodoDbContext>(options =>
-            //    options.UseSqlite(Configuration.GetConnectionString("Default")));
-
-//            Console.Write(Heroku.Confgs);
 
             services.AddDbContext<TodoDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Heroku_Postgres")));
