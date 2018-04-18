@@ -25,11 +25,12 @@ namespace Todo.net
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+
             //services.AddDbContext<TodoDbContext>(options =>
             //    options.UseSqlite(Configuration.GetConnectionString("Default")));
+
             services.AddDbContext<TodoDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Default_pgsql")));
+                options.UseNpgsql(Configuration.GetConnectionString("Heroku_Postgres")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
