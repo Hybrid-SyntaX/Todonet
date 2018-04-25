@@ -44,6 +44,7 @@
                         <tr *ngFor="let t of tasks; let i=index"  
                             (click)="select(t);" 
                             [ngClass]="{'active': task == t}"
+                            
                             style="z-index: 1;" >
 
                             <td >{{ i+1 }} </td>
@@ -53,7 +54,15 @@
                                  (change)="toggleCompletion();"
                                 />
                             </td>
-                            <td class="col-md-6" *ngIf="!editMode" >{{ t.name }}</td>
+                            <td class="col-md-6" *ngIf="!editMode" 
+                            [ngClass]="{'done': t.completionDate!=null}" >
+                            {{ t.name }} 
+                                <span *ngIf="t.completionDate!=null" 
+                                class="glyphicon glyphicon-ok"
+                                style="color:green;"
+                                ></span> 
+                            </td>
+
                             
                             <form (ngSubmit)="save()" class="inline" *ngIf="editMode && t==task">
                                 <td class="col-md-6"  >
@@ -111,7 +120,7 @@
 
 
 </div>
-<div class="row">
+<div class="row" *ngIf="devMode==true">
         <pre > 
 
         {{ task | json }}

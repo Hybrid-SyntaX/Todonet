@@ -11,14 +11,15 @@ import { SharedService } from '../../services/shared.service';
 @Component({
     selector: 'tasks-list',
     templateUrl: './taskslist.component.html',
-    //styleUrls: ['./taskslist.component.css']
+    styleUrls: ['./taskslist.component.css']
 })
 //export namespace Tasks {
 export class TasksListComponent implements OnInit {
     EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
     tasks: any[];
     task: TodoTask=new TodoTask();
-
+    devMode =isDevMode()
+    
     deleteMode=false;
     editMode=false;
     newMode=false;
