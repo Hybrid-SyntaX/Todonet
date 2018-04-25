@@ -26,14 +26,14 @@ namespace Todo.net.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public IEnumerable<TodoTask> GetTodoTasks()
+        public IEnumerable<TodoTask> ReadAll()
         {
             return _context.TodoTasks;
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTodoTask([FromRoute] Guid id)
+        public async Task<IActionResult> Read([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace Todo.net.Controllers
 
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoTask([FromRoute] Guid id, [FromBody] TodoTask todoTask)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] TodoTask todoTask)
         {
             if (!ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace Todo.net.Controllers
 
         // POST: api/Tasks
         [HttpPost]
-        public async Task<IActionResult> PostTodoTask([FromBody] TodoTask todoTask)
+        public async Task<IActionResult> Create([FromBody] TodoTask todoTask)
         {
             if (!ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace Todo.net.Controllers
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoTask([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -116,6 +116,31 @@ namespace Todo.net.Controllers
             }
 
             _context.TodoTasks.Remove(todoTask);
+            await _context.SaveChangesAsync();
+
+            return Ok(todoTask);
+        }
+        
+       
+        // PUT: api/Tasks/5
+        [HttpPatch("{id}/done")]
+        public async Task<IActionResult> Do([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var todoTask = await _context.TodoTasks.SingleOrDefaultAsync(m => m.Id == id);
+            if (todoTask == null)
+            {
+                return NotFound();
+            }
+            //update date
+            
+
+
+            //_context.TodoTasks.Remove(todoTask);
             await _context.SaveChangesAsync();
 
             return Ok(todoTask);

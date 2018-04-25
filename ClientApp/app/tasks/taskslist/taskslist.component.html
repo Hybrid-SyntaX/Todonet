@@ -2,41 +2,114 @@
 
 <!--<task-form></task-form>-->
 
-<pre> 
 
-  {{ task | json }}
-  
-</pre>
-<form (ngSubmit)="save()" class="form-inline">
-    
-        <input type="text"
-               name="name"
-               id="name"
-               class="form-control"
-               [(ngModel)]="task.name" />
-        <button class="btn btn-default">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-    
-</form>
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Task</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let task of tasks">
-            <td>{{ task.name }}</td>
-            <td class="btn-group" > <!-- TODO: show on hover only-->
-                <button class="btn btn-default btn-sm" (click)="edit(task)">
-                    <span class="glyphicon glyphicon-pencil" ></span>
+<div class="container">
+    <div class="col-md-4">
+            <div class="row">
+                <button class="btn btn-default" *ngIf="!newMode" (click)="newTask();newMode=true" >
+                    <span class="glyphicon glyphicon-plus"></span>
                 </button>
-                <button class="btn btn-default btn-sm" (click)="remove(task)">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-            </td>
-        </tr>
+                <form (ngSubmit)="save()" class="form-inline" >
+                    
+                        <input type="text"
+                            name="name"
+                            id="name"
+                            class="form-control"
+                            [(ngModel)]="task.name"
+                            *ngIf="newMode==true"
+                            />
+
+                        <div class=" btn-group" *ngIf="newMode==true" >
+                            <button class="btn btn-default" (click)="save();newMode=false">
+                                <span class="glyphicon glyphicon-floppy-save"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="cancel();newMode=false">
+                                <span class="glyphicon glyphicon-ban-circle" ></span>
+                            </button>
+                        </div>
+                    
+                </form>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" ></th>
+                            <th scope="col" ></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let t of tasks; let i=index"  
+                            (click)="select(t);" 
+                            [ngClass]="{'active': task == t}"
+                            style="z-index: 1;" >
+
+                            <td >{{ i+1 }}</td>
+                            <td ><input type="checkbox" class="form-check-input position-static" /></td>
+                            <td class="col-md-6" *ngIf="!editMode" >{{ t.name }}</td>
+                            
+                            <form (ngSubmit)="save()" class="inline" *ngIf="editMode && t==task">
+                                <td class="col-md-6"  >
+                                        <input type="text"
+                                            name="name"
+                                            id="name"
+                                            (click)="$event.stopPropagation();"
+                                            class="form-control"
+                                            [(ngModel)]="t.name" />
+                                </td>
         
-    </tbody>
-</table>
+        
+                            </form>
+        
+                            <td > <!-- TODO: show on hover only-->
+                                <div *ngIf="task == t">
+                                    <div class=" btn-group" *ngIf="!deleteMode && !editMode"  style="z-index: 2" >
+                                        <button class="btn btn-default btn-sm" (click)="editMode=true;$event.stopPropagation();">
+                                            <span class="glyphicon glyphicon-pencil" ></span>
+                                        </button>
+                                        <button class="btn btn-default btn-sm" (click)="deleteMode=true;$event.stopPropagation();">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+        
+                                    <div class=" btn-group" *ngIf="deleteMode==true" style="z-index: 3">
+                                        <!-- delete mode -->
+                                        <button class="btn btn-default btn-sm" (click)="deleteMode=false">
+                                            <span class="glyphicon glyphicon-ban-circle" ></span>
+                                        </button>
+                                        <button class="btn btn-default btn-sm" (click)="remove();deleteMode=false">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>
+        
+                                    <div class=" btn-group" *ngIf="editMode==true" style="z-index: 3" >
+                                        <!-- delete mode -->
+                                        <button class="btn btn-default btn-sm" (click)="cancel();editMode=false">
+                                            <!--Todo: implement cnacel -->
+                                            <span class="glyphicon glyphicon-ban-circle" ></span>
+                                        </button>
+                                        <button class="btn btn-default btn-sm" (click)="save();editMode=false">
+                                            <span class="glyphicon glyphicon-floppy-save"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                    
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+</div>
+<div class="row">
+        <pre > 
+
+        {{ task | json }}
+        
+        </pre>
+</div>

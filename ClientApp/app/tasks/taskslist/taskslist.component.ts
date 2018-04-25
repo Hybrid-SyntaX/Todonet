@@ -1,10 +1,11 @@
-﻿import { isDevMode, NgModule } from '@angular/core';
+﻿import { TodoTask } from './../../models/task';
+import { isDevMode, NgModule } from '@angular/core';
 import { ServerModule } from '@angular/platform-server';
 import { Component, OnInit } from '@angular/core';
 import { TasksService } from '../../services/tasks.service';
 import { Observable } from 'rxjs/Observable';
 import { SharedService } from '../../services/shared.service';
-import { TodoTask } from '../../models/task';
+
 
 
 @Component({
@@ -20,17 +21,29 @@ export class TasksListComponent implements OnInit {
         id: this.EMPTY_GUID,
         name: ''
     };
+    originalTask: TodoTask = {
+        id: this.EMPTY_GUID,
+        name: ''
+    };
+
+    deleteMode=false;
+    editMode=false;
+    newMode=false;
+
     constructor(private tasksService: TasksService, private sharedService: SharedService) {
 
 
         this.tasks = [];
     }
     ngOnInit(): void {
+        
         this.populate();
     }
     populate() {
         this.tasksService.getTasks()
             .subscribe(tasks => this.tasks = tasks);
+
+     
     }
     save(): void {
         var result$ = (this.task.id != this.EMPTY_GUID) ? this.tasksService.update(this.task)
@@ -40,15 +53,44 @@ export class TasksListComponent implements OnInit {
             this.populate();
         });
     }
-    
-    remove(currentTask: TodoTask): void {
-        console.log("Remove " + currentTask.id)
-        this.tasksService.delete(currentTask.id).subscribe(()=>this.populate());
+    newTask():void{
+        this.task=new TodoTask();
     }
-    edit(currentTask: TodoTask): void {
-        console.log("Edit " + currentTask.id)
+    remove(): void {
+        this.tasksService.delete(this.task.id).subscribe(()=>this.populate());
+        console.log("Remove " + this.task.id)
+    }
+    edit(): void {
+        //this.task = currentTask;
+        console.log("Edit " + this.task.id)
+    }
+    select(currentTask: TodoTask): void {
+        console.log("Select " + currentTask.id)
         this.task = currentTask;
+        this.cancelModes();
+        
     }
+    cancel():void{
+        //method 1: very safe; costly
+        if(this.task.id != this.EMPTY_GUID)
+        {
+            this.tasksService.getTask(this.task.id).subscribe((t)=>{
+                this.task=t;
+                this.populate();
+            });
+        }
+        else
+        {
+            this.newTask();
+        }
+        //method 2: replace task with original task
+        //this.task=this.originalTask;
 
+    }
+    cancelModes(){
+        this.deleteMode=false;
+        this.editMode=false;
+        this.newMode=false;
+    }
 }
 //}
