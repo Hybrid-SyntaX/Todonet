@@ -12,7 +12,9 @@ namespace Todo.net.Core.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        //public DateTime CompletionDate {get;set;}
-        //public DateTime LastUpdated {get;set;}
+        public DateTime? DueDate {get;set;}
+        public DateTime? CompletionDate {get;set;}
+        public DateTime CreationDate {get;set;}
+        public DateTime LastUpdated {get;set;}
     }
 }

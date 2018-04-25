@@ -17,14 +17,7 @@ import { SharedService } from '../../services/shared.service';
 export class TasksListComponent implements OnInit {
     EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
     tasks: any[];
-    task: TodoTask = {
-        id: this.EMPTY_GUID,
-        name: ''
-    };
-    originalTask: TodoTask = {
-        id: this.EMPTY_GUID,
-        name: ''
-    };
+    task: TodoTask=new TodoTask();
 
     deleteMode=false;
     editMode=false;
@@ -91,6 +84,19 @@ export class TasksListComponent implements OnInit {
         this.deleteMode=false;
         this.editMode=false;
         this.newMode=false;
+    }
+    toggleCompletion():void{
+        if(this.task.id != this.EMPTY_GUID)
+        {
+            console.log('BEFORE complete:' +this.task.completionDate)
+            if(this.task.completionDate==null)
+                this.tasksService.do(this.task).subscribe(()=>this.populate());
+            else
+                this.tasksService.undo(this.task).subscribe(()=>this.populate());
+                
+            
+            console.log('AFTER complete:' +this.task.completionDate)
+        }
     }
 }
 //}

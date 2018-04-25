@@ -30,9 +30,14 @@ export class TasksService {
         return this.http.put(this.API_ENDPOINT + '/' + task.id, task)
             .map(res => res.json());
     }
-    complete(task: TodoTask): any {
+    do(task: TodoTask): any {
         
-        return this.http.patch(this.API_ENDPOINT + '/' + task.id, task)
+        return this.http.put(this.API_ENDPOINT + '/' + task.id +'/done', task)
+            .map(res => res.json());
+    }
+    undo(task: TodoTask): any {
+        
+        return this.http.put(this.API_ENDPOINT + '/' + task.id +'/undone', task)
             .map(res => res.json());
     }
 }

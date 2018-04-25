@@ -28,7 +28,7 @@ namespace Todo.net.Controllers
         [HttpGet]
         public IEnumerable<TodoTask> ReadAll()
         {
-            return _context.TodoTasks;
+            return _context.TodoTasks.OrderBy((t)=>t.CreationDate);
         }
 
         // GET: api/Tasks/5
@@ -64,10 +64,12 @@ namespace Todo.net.Controllers
                 return BadRequest();
             }
 
+
             _context.Entry(todoTask).State = EntityState.Modified;
 
             try
             {
+                todoTask.LastUpdated=DateTime.Now;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -93,7 +95,8 @@ namespace Todo.net.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            todoTask.LastUpdated=DateTime.Now;
+            todoTask.CreationDate=DateTime.Now;
             _context.TodoTasks.Add(todoTask);
             await _context.SaveChangesAsync();
 
@@ -123,7 +126,7 @@ namespace Todo.net.Controllers
         
        
         // PUT: api/Tasks/5
-        [HttpPatch("{id}/done")]
+        [HttpPut("{id}/done")]
         public async Task<IActionResult> Do([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
@@ -138,7 +141,32 @@ namespace Todo.net.Controllers
             }
             //update date
             
+            todoTask.LastUpdated=DateTime.Now;
+            todoTask.CompletionDate=DateTime.Now;
 
+            //_context.TodoTasks.Remove(todoTask);
+            await _context.SaveChangesAsync();
+
+            return Ok(todoTask);
+        }
+                // PUT: api/Tasks/5
+        [HttpPut("{id}/undone")]
+        public async Task<IActionResult> Undo([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var todoTask = await _context.TodoTasks.SingleOrDefaultAsync(m => m.Id == id);
+            if (todoTask == null)
+            {
+                return NotFound();
+            }
+            //update date
+            
+            todoTask.LastUpdated=DateTime.Now;
+            todoTask.CompletionDate=null;
 
             //_context.TodoTasks.Remove(todoTask);
             await _context.SaveChangesAsync();
