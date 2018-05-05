@@ -1,1 +1,5 @@
- [Online demo of Todo.net on Heroku](https://todo-net.herokuapp.com)
+# Todo.net
+
+A simple todo application using ASP.Net Core, Entity Framework, Angular and PostgresQL.
+
+[The online demo is on Heroku available](https://todo-net.herokuapp.com/tasks)
